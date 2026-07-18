@@ -3,43 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediaGendaWeb - Inicio</title>
+    <title>Bienvenido a MediAgenda</title>
+    <!-- FontAwesome para los íconos de Paciente, Médico y Administrador -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+        * {
+            box-sizing: border-box;
             margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f7fc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Cabecera con degradado morado idéntico al de tu imagen */
+        .header {
+            background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Contenedor de las tarjetas de selección */
+        .main-content {
+            flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            padding: 40px 20px;
         }
-        .container {
-            text-align: center;
+
+        .cards-container {
+            display: flex;
+            gap: 25px;
+            max-width: 1000px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Estilo de los botones/tarjetas */
+        .role-card {
             background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        h1 { color: #333; }
-        p { color: #666; }
-        .btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
+            border-radius: 12px;
+            width: 240px;
+            padding: 35px 20px;
+            text-align: center;
             text-decoration: none;
-            border-radius: 5px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1px solid rgba(0,0,0,0.02);
         }
-        .btn:hover { background-color: #0056b3; }
+
+        /* Efecto sutil al pasar el mouse por encima */
+        .role-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(124, 58, 237, 0.1);
+        }
+
+        /* Estilos para los íconos de FontAwesome con color morado */
+        .role-card i {
+            font-size: 3.5rem;
+            color: #7c3aed;
+            margin-bottom: 20px;
+        }
+
+        /* Texto debajo de los íconos */
+        .role-card span {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #4c1d95;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>¡Bienvenido a MediaGendaWeb!</h1>
-        <p>Tu servidor Node.js y la vista Index están funcionando perfectamente.</p>
-        <a href="/auth/login" class="btn">Ir al Login</a>
-    </div>
+
+    <!-- Sección de la Cabecera -->
+    <header class="header">
+        <h1>Bienvenido a MediAgenda</h1>
+        <p>Selecciona tu rol para ingresar al sistema de gestión de citas</p>
+    </header>
+
+    <!-- Sección de Roles (Modifica los 'href' con tus rutas reales de Express) -->
+    <main class="main-content">
+        <div class="cards-container">
+            
+            <!-- Tarjeta Paciente -->
+            <a href="/auth/login?role=paciente" class="role-card">
+                <i class="fa-solid fa-user"></i>
+                <span>Paciente</span>
+            </a>
+
+            <!-- Tarjeta Médico -->
+            <a href="/auth/login?role=medico" class="role-card">
+                <i class="fa-solid fa-stethoscope"></i>
+                <span>Médico</span>
+            </a>
+
+            <!-- Tarjeta Administrador -->
+            <a href="/auth/login?role=admin" class="role-card">
+                <i class="fa-solid fa-gear"></i>
+                <span>Administrador</span>
+            </a>
+
+        </div>
+    </main>
+
 </body>
 </html>
