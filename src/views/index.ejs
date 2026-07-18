@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenido a MediAgenda</title>
-    <!-- Enlace nativo de Bootstrap Icons para asegurar que carguen los dibujitos en Render -->
-    <link rel="stylesheet" href="https://jsdelivr.net">
     
     <style>
         * {
@@ -78,25 +76,30 @@
             border: 2px solid transparent; 
         }
 
-        /* EFECTO CELESTE PASTEL BRILLOSO (NEÓN) AL PASAR EL MOUSE */
+        /* Efecto celeste pastel resplandeciente */
         .role-card:hover {
             transform: translateY(-10px);
-            border-color: #38bdf8; /* Borde celeste más vivo */
-            /* Combinación de sombras para simular un brillo/resplandor celeste */
+            border-color: #38bdf8; 
             box-shadow: 0 0 20px rgba(56, 189, 248, 0.6), 
                         0 0 40px rgba(56, 189, 248, 0.4),
                         0 10px 30px rgba(0, 0, 0, 0.08); 
         }
 
-        /* Estilo de los nuevos dibujitos (Bootstrap Icons) con degradado morado */
-        .role-card i {
-            font-size: 4.8rem; 
-            margin-bottom: 18px;
-            background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: inline-block;
+        /* Ajuste de tamaño y degradado para los íconos vectoriales SVG */
+        .role-card svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 22px;
+            transition: transform 0.3s ease;
         }
+
+        .role-card:hover svg {
+            transform: scale(1.05);
+        }
+
+        /* Color degradado aplicado a las figuras internas del SVG */
+        .role-card svg stop.color-top { stop-color: #a78bfa; }
+        .role-card svg stop.color-bottom { stop-color: #7c3aed; }
 
         /* Texto de los roles */
         .role-card span {
@@ -116,21 +119,36 @@
     <main class="main-content">
         <div class="cards-container">
             
-            <!-- Tarjeta Paciente con ícono de persona -->
+            <!-- Definición compartida del degradado morado para los SVGs -->
+            <svg style="width:0; height:0; position:absolute;" aria-hidden="true" focusable="false">
+                <linearGradient id="purple-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop class="color-top" offset="0%" />
+                    <stop class="color-bottom" offset="100%" />
+                </linearGradient>
+            </svg>
+
+            <!-- Tarjeta Paciente con Dibujo Vectorial Fijo -->
             <a href="/auth/login?role=paciente" class="role-card">
-                <i class="bi bi-person-fill"></i>
+                <svg viewBox="0 0 16 16" fill="url(#purple-gradient)">
+                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                </svg>
                 <span>Paciente</span>
             </a>
 
-            <!-- Tarjeta Médico con ícono de pulso cardíaco/salud -->
+            <!-- Tarjeta Médico con Dibujo Vectorial Fijo -->
             <a href="/auth/login?role=medico" class="role-card">
-                <i class="bi bi-heart-pulse-fill"></i>
+                <svg viewBox="0 0 16 16" fill="url(#purple-gradient)">
+                    <path d="M8 14.25c.19 0 .366-.07.5-.2l5.133-4.703c1.433-1.314 1.433-3.443 0-4.757a3.56 3.56 0 0 0-4.908 0L8 5.23 7.275 4.59a3.56 3.56 0 0 0-4.908 0c-1.433 1.314-1.433 3.443 0 4.757L7.5 14.05c.134.13.31.2.5.2m0-11.55c.346-.574.962-1 1.75-1 1.38 0 2.5 1.12 2.5 2.5 0 1.206-.734 2.228-1.75 2.75V11h-1V8h-3v3h-1V6.95C4.234 6.428 3.5 5.406 3.5 4.2c0-1.38 1.12-2.5 2.5-2.5.788 0 1.404.426 1.75 1z"/>
+                </svg>
                 <span>Médico</span>
             </a>
 
-            <!-- Tarjeta Administrador con ícono de engranaje -->
+            <!-- Tarjeta Administrador con Dibujo Vectorial Fijo -->
             <a href="/auth/login?role=admin" class="role-card">
-                <i class="bi bi-gear-fill"></i>
+                <svg viewBox="0 0 16 16" fill="url(#purple-gradient)">
+                    <path d="M9.405 1.02c-.252-.61-1.12c-.61-1.81 0-.252.61-1.12.61-1.81 0zm-1.077.342a.5.5 0 0 1 .416 0l.422.146a.5.5 0 0 1 .316.316l.146.422a.5.5 0 0 1 0 .416l-.146.422a.5.5 0 0 1-.316.316l-.422.146a.5.5 0 0 1-.416 0l-.422-.146a.5.5 0 0 1-.316-.316l-.146-.422a.5.5 0 0 1 0-.416l.146-.422a.5.5 0 0 1 .316-.316zM8 4.75a3.25 3.25 0 1 1 0 6.5 3.25 3.25 0 0 1 0-6.5zM8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                    <path d="M4.755.123A.5.5 0 0 1 5.16.48l.056.241c.07.301.21.577.408.812l.147.174a.5.5 0 0 1-.067.704l-.213.164a.5.5 0 0 1-.603-.054L4.17 1.95a5.5 5.5 0 0 1-.876-1.531zm3.666 14.542a.5.5 0 0 1-.404-.356l-.056-.241a3.6 3.6 0 0 0-.408-.812l-.147-.174a.5.5 0 0 1 .067-.704l.213-.164a.5.5 0 0 1 .603.054l.719.57a5.5 5.5 0 0 1 .876 1.531zM.123 11.245a.5.5 0 0 1 .357-.405l.241-.056c.301-.07.577-.21.812-.408l.174-.147a.5.5 0 0 1 .704.067l.164.213a.5.5 0 0 1-.054.603l-.57.719a5.5 5.5 0 0 1-1.531.876zM14.542 4.755a.5.5 0 0 1 .405.357l.056.241c.07.301.21.577.408.812l.147.174a.5.5 0 0 1-.067.704l-.213.164a.5.5 0 0 1-.603-.054l-.719-.57a5.5 5.5 0 0 1-.876-1.531z"/>
+                </svg>
                 <span>Administrador</span>
             </a>
 
