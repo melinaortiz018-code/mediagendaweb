@@ -160,6 +160,8 @@
         <% } %>
 
         <form action="/auth/register" method="POST">
+            <input type="hidden" name="rol_id" value="1">
+
             <div class="form-group">
                 <label>Nombre Completo</label>
                 <input type="text" name="nombre" placeholder="Tu nombre" required>
