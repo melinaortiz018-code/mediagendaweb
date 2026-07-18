@@ -1,91 +1,41 @@
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
+
+// Importación de tus rutas (Ajustadas a la carpeta src)
+const authRoutes = require('./routes/authRoutes');
+const adminRoutes = require('./routes/adminRoutes'); 
+
 const app = express();
 
-// Configuración de Middlewares
+// Configuración de Middlewares obligatorios
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Configuración de Sesiones Seguras
+// Configuración de sesiones (si las usas para login)
 app.use(session({
-    secret: 'mediagenda_secret_key_12345',
+    secret: 'secret-key-mediagenda',
     resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false } // Cambiar a true si usas HTTPS en producción
+    saveUninitialized: true
 }));
 
-// Servir archivos estáticos (CSS, Imágenes, JS del cliente)
-app.use(express.static(path.join(__dirname, 'src', 'public')));
-
-// Configuración del Motor de Plantillas (Views)
+// Configuración de vistas EJS
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'src', 'views'));
+app.set('views', path.join(__dirname, 'views'));
 
-// Ruta Inicial de Prueba
+// Configuración de archivos estáticos (CSS, imágenes)
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Uso de tus rutas en el sistema
+app.use('/', authRoutes);
+app.use('/admin', adminRoutes); // Si tus rutas de admin empiezan con /admin
+
+// Ruta de prueba inicial
 app.get('/', (req, res) => {
     res.send('Servidor de MEDIAGENDA funcionando correctamente.');
 });
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
-const express = require('express');
-const session = require('express-session');
-const path = require('path');
-const authRoutes = require('./src/routes/authRoutes'); // <-- Nueva línea
-
-const app = express();
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
-app.use(session({
-    secret: 'mediagenda_secret_key_12345',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false }
-}));
-
-// Servir archivos estáticos apuntando correctamente a src/public
-app.use(express.static(path.join(__dirname, 'src', 'public')));
-
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'src', 'views'));
-
-// Enlace de las rutas de Autenticación
-app.use('/auth', authRoutes); // <-- Nueva línea
-
-// Redirección por defecto al login
-app.get('/', (req, res) => {
-    res.redirect('/auth/login');
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
-// ... (Tus imports anteriores en app.js)
-const authRoutes = require('./src/routes/authRoutes');
-const pacienteRoutes = require('./src/routes/pacienteRoutes'); // <-- Agregar línea
-
-// ... (Tus configuraciones de app.use)
-app.use('/auth', authRoutes);
-app.use('/dashboard', pacienteRoutes); // <-- Agregar línea
-
-// ... (El resto del código de app.listen sin cambios)
-// ... (Tus importaciones anteriores)
-const pacienteRoutes = require('./src/routes/pacienteRoutes');
-const medicoRoutes = require('./src/routes/medicoRoutes'); // <-- Agregar línea
-
-const app = express();
-// ... (Tus configuraciones de middlewares)
-
-app.use('/auth', authRoutes);
-app.use('/dashboard', pacienteRoutes);
-app.use('/dashboard', medicoRoutes); // <-- Agregar línea
-
-// ... (Resto del código de app.listen)
+// Iniciar Servidor (Siempre al final absoluto)
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);
