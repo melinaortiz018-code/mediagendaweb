@@ -1,4 +1,4 @@
-const db = require('../config/db');
+const db = require('../db');
 
 exports.renderDashboard = async (req, res) => {
     const medicoId = req.session.usuario.id;
