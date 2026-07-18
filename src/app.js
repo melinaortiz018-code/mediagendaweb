@@ -27,11 +27,9 @@ app.get('/', (req, res) => {
     res.send('Servidor de MEDIAGENDA funcionando correctamente.');
 });
 
-// Iniciar Servidor
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
@@ -88,3 +86,7 @@ app.use('/dashboard', pacienteRoutes);
 app.use('/dashboard', medicoRoutes); // <-- Agregar línea
 
 // ... (Resto del código de app.listen)
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en el puerto ${PORT}`);
+});
