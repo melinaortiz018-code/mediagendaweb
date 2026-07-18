@@ -29,8 +29,9 @@ app.use(session({
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views')); 
 
-// 5. CORRECCIÓN DE ESTÁTICOS
-app.use(express.static(path.join(__dirname, 'public'))); 
+// Configuración de archivos estáticos (Ruta absoluta ultra segura)
+app.use(express.static(path.join(__dirname, 'src', 'public')));
+
 
 // 6. Inyección de URLs con prefijos individuales
 app.use('/auth', authRoutes);
