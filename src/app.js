@@ -39,10 +39,10 @@ app.use('/paciente', pacienteRoutes);
 app.use('/medico', medicoRoutes);     
 app.use('/admin', adminRoutes);       
 
-// 7. Redirección automática al Login
 app.get('/', (req, res) => {
-    res.redirect('/auth/login');
+    res.render('index');
 });
+
 
 // 8. Encendido del Servidor
 const PORT = process.env.PORT || 3000;
