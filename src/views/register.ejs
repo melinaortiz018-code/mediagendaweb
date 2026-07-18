@@ -4,43 +4,205 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MediAgenda - Registro</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e0f2fe; 
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #f3f0ff; 
+            border-radius: 24px;
+            width: 100%;
+            max-width: 450px;
+            padding: 40px 35px;
+            box-shadow: 0 20px 40px rgba(124, 58, 237, 0.15); 
+            border: 2px solid #e9d5ff; 
+            text-align: center;
+        }
+
+        .container h2 {
+            color: #5b21b6; 
+            font-size: 2.1rem;
+            margin-bottom: 25px;
+            font-weight: 800;
+        }
+
+        .error-box {
+            background-color: #fee2e2;
+            color: #ef4444; 
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border: 2px solid #fca5a5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #6b21a8; 
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .password-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #d8b4fe; 
+            border-radius: 14px;
+            font-size: 1rem;
+            color: #4c1d95;
+            background-color: white;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #c084fc;
+            box-shadow: 0 0 12px rgba(192, 132, 252, 0.5);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #a855f7;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white; 
+            border: none;
+            border-radius: 14px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(5, 150, 105, 0.3);
+            text-transform: uppercase;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.5),
+                        0 0 15px rgba(16, 185, 129, 0.6);
+        }
+
+        p {
+            margin-top: 25px;
+            font-size: 0.95rem;
+            color: #6b21a8;
+            font-weight: 500;
+        }
+
+        p a {
+            color: #38bdf8; 
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            padding: 2px 6px;
+            border-radius: 6px;
+        }
+
+        p a:hover {
+            color: #0284c7;
+            background-color: #e0f2fe;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
+
     <div class="container">
         <h2>Crear Cuenta</h2>
         
-        <% if (error) { %>
-            <div style="color: red; text-align: center; margin-bottom: 10px;"><%= error %></div>
-        <% } %>
-        <% if (success) { %>
-            <div style="color: green; text-align: center; margin-bottom: 10px;"><%= success %></div>
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="error-box">
+                <%= error %>
+            </div>
         <% } %>
 
         <form action="/auth/register" method="POST">
             <div class="form-group">
                 <label>Nombre Completo</label>
-                <input type="text" name="nombre" required>
+                <input type="text" name="nombre" placeholder="Tu nombre" required>
             </div>
+
             <div class="form-group">
                 <label>Correo Electrónico</label>
-                <input type="email" name="correo" required>
+                <input type="email" name="correo" placeholder="ejemplo@correo.com" required>
             </div>
+            
             <div class="form-group">
                 <label>Contraseña</label>
-                <input type="password" name="password" required>
+                <div class="password-container">
+                    <input type="password" name="password" id="registerPasswordInput" placeholder="••••••••" required>
+                    <button type="button" class="toggle-password" onclick="toggleRegisterPassword()">
+                        <svg id="registerEyeIcon" xmlns="http://w3.org" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Tipo de Usuario (Rol)</label>
-                <select name="rol_id" required>
-                    <option value="3">Paciente</option>
-                    <option value="2">Médico</option>
-                    <option value="1">Administrador</option>
-                </select>
-            </div>
+            
             <button type="submit">Registrarse</button>
         </form>
-        <p>¿Ya tienes cuenta? <a href="/auth/login">Inicia Sesión aquí</a></p>
+        
+        <p>¿Ya tienes una cuenta? <a href="/auth/login">Inicia sesión aquí</a></p>
     </div>
+
+    <script>
+        function toggleRegisterPassword() {
+            const passwordInput = document.getElementById('registerPasswordInput');
+            const eyeIcon = document.getElementById('registerEyeIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.innerHTML = `<path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7 7 0 0 0-2.79.588l.77.771A6 6 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755q-.168.167-.343.315zm-2.144 2.144c-.733.332-1.564.518-2.415.518-4.664 0-8-5.5-8-5.5a7 7 0 0 1 2.15-2.586l.668.668A6 6 0 0 0 1.172 8c.346.496.86 1.17 1.51 1.812C4.12 11.132 5.88 12.5 8 12.5c.712 0 1.386-.128 2.012-.357zm-1.843-1.843A4 4 0 0 1 4.238 6.414l.79.79A2.5 2.5 0 0 0 7.5 9.5z"/><path d="M1 1l14 14"/>`;
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.innerHTML = `<path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/><path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>`;
+            }
+        }
+    </script>
+
 </body>
 </html>
