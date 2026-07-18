@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediAgenda - Panel de Administración</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body { display: block; padding: 20px; min-height: auto; }
+        .dashboard-container { max-width: 1200px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #E8DFF5; padding-bottom: 15px; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 25px; }
+        .card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; background: #fafafa; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #6C5B7B; color: white; }
+        
+        /* Estilos del Dashboard Estadístico */
+        .metricas-box { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .metrica-card { background: #E8DFF5; border-radius: 6px; padding: 15px; text-align: center; border: 1px solid #d2c4e8; }
+        .metrica-card h4 { margin: 0 0 10px 0; color: #4A3E56; }
+        .metrica-val { font-size: 26px; font-weight: bold; color: #6C5B7B; }
+        
+        /* Gráfico de Barras CSS Nativo */
+        .barra-grafico-container { margin-top: 15px; }
+        .item-barra { margin-bottom: 12px; }
+        .label-barra { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; font-weight: bold; }
+        .fondo-barra { background: #e0e0e0; border-radius: 4px; height: 18px; width: 100%; overflow: hidden; }
+        .relleno-barra { background: #6C5B7B; height: 100%; border-radius: 4px; transition: width 0.5s; }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <div class="header">
+            <h2>Panel General de Administración (Módulos Críticos)</h2>
+            <a href="/auth/logout" style="color: red; font-weight: bold;">Cerrar Sesión</a>
+        </div>
+
+        <% if (success) { %>
+            <div style="background-color: var(--estado-atendido); color: black; padding: 12px; margin-bottom: 15px; border-radius: 6px; text-align: center; font-weight: bold;"><%= success %></div>
+        <% } %>
+
+        <div class="grid">
+            <!-- Sección 1: Gestión y Asignación de Horarios de Trabajo -->
+            <div class="card">
+                <h3>Definir Jornada de Atención Médica</h3>
+                <form action="/dashboard/admin/horario" method="POST">
+                    <div class="form-group">
+                        <label>Seleccionar Médico</label>
+                        <select name="medico_id" required>
+                            <option value="">-- Elige un Médico --</option>
+                            <% medicos.forEach(med => { %>
+                                <option value="<%= med.id %>"><%= med.nombre %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Día Autorizado</label>
+                        <select name="dia_semana" required>
+                            <option value="Lunes">Lunes</option>
+                            <option value="Martes">Martes</option>
+                            <option value="Miercoles">Miércoles</option>
+                            <option value="Jueves">Jueves</option>
+                            <option value="Viernes">Viernes</option>
+                            <option value="Sabado">Sábado</option>
+                            <option value="Domingo">Domingo</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Hora de Apertura (Inicio)</label>
+                        <input type="time" name="hora_inicio" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Hora de Cierre (Fin)</label>
+                        <input type="time" name="hora_fin" required>
+                    </div>
+
+                    <button type="submit">Establecer Horario de Trabajo</button>
+                </form>
+            </div>
+
+            <!-- Sección 2: Dashboard Estadístico / Reporte Visual -->
+            <div class="card">
+                <h3>Reporte Estadístico del Mes</h3>
+                
+                <div class="metricas-box">
+                    <div class="metrica-card">
+                        <h4>Citas del Mes Actual</h4>
+                        <div class="metrica-val"><%= estadisticas.totalMes %></div>
+                    </div>
+                    <div class="metrica-card">
+                        <h4>Índice de Cancelación</h4>
+                        <div class="metrica-val" style="color: var(--estado-cancelado);"><%= estadisticas.porcentajeCanceladas %>%</div>
+                    </div>
+                </div>
+
+                <h4>Ranking: Demanda de Médicos Solicitados</h4>
+                <div class="barra-grafico-container">
+                    <% if (estadisticas.rankingMedicos.length === 0) { %>
+                        <p style="text-align: left; color: #777;">No hay datos de citas suficientes para estructurar el ranking.</p>
+                    <% } else { %>
+                        <% estadisticas.rankingMedicos.forEach(med => { %>
+                            <!-- Cálculo de ancho relativo simulando gráfico de barra -->
+                            <% let maxCitas = estadisticas.rankingMedicos[0].total_citas || 1; %>
+                            <% let anchoBarra = Math.round((med.total_citas / maxCitas) * 100); %>
+                            
+                            <div class="item-barra">
+                                <div class="label-barra">
+                                    <span><%= med.nombre %></span>
+                                    <span><%= med.total_citas %> Citas</span>
+                                </div>
+                                <div class="fondo-barra">
+                                    <div class="relleno-barra" style="width: <%= anchoBarra %>%;"></div>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla Informativa de los bloques establecidos -->
+        <div class="card">
+            <h3>Jornadas Laborales Activas</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre del Profesional</th>
+                        <th>Día Laboral</th>
+                        <th>Rango de Horario Autorizado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% horarios.forEach(h => { %>
+                        <tr>
+                            <td><strong><%= h.medico_nombre %></strong></td>
+                            <td><%= h.dia_semana %></td>
+                            <td><%= h.hora_inicio.substring(0,5) %> AM - <%= h.hora_fin.substring(0,5) %> PM</td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>
+const express = require('express');
+const session = require('express-session');
+const path = require('path');
+
+// Importaciones de todos los módulos de enrutamiento construidos
+const authRoutes = require('./src/routes/authRoutes');
+const pacienteRoutes = require('./src/routes/pacienteRoutes');
+const medicoRoutes = require('./src/routes/medicoRoutes');
+const adminRoutes = require('./src/routes/adminRoutes'); // <-- Última línea
+
+const app = express();
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.use(session({
+    secret: 'mediagenda_secret_key_12345',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }
+}));
+
+app.use(express.static(path.join(__dirname, 'src', 'public')));
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'src', 'views'));
+
+// Inyección y mapeo de las URLs del Sistema Web MVC
+app.use('/auth', authRoutes);
+app.use('/dashboard', pacienteRoutes);
+app.use('/dashboard', medicoRoutes);
+app.use('/dashboard', adminRoutes); // <-- Última línea
+
+app.get('/', (req, res) => {
+    res.redirect('/auth/login');
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});
