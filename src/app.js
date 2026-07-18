@@ -24,7 +24,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // Configuración de archivos estáticos (CSS, imágenes)
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Uso de tus rutas en el sistema
 app.use('/', authRoutes);
