@@ -1,5 +1,3 @@
-CREATE DATABASE IF NOT EXISTS mediagenda;
-USE mediagenda;
 
 -- 1. Tabla de Roles
 CREATE TABLE roles (
