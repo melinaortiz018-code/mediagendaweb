@@ -4,28 +4,243 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MediAgenda - Login</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <!-- Bootstrap Icons para los íconos del ojo, alertas y candados -->
+    <link rel="stylesheet" href="https://jsdelivr.net">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e0f2fe; /* Celeste pastel de fondo para mantener la armonía */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Tarjeta principal Morado Pastel Premium */
+        .container {
+            background: #f3f0ff; 
+            border-radius: 24px;
+            width: 100%;
+            max-width: 430px;
+            padding: 45px 35px;
+            box-shadow: 0 20px 40px rgba(124, 58, 237, 0.15); 
+            border: 2px solid #e9d5ff; 
+            text-align: center;
+        }
+
+        .container h2 {
+            color: #5b21b6; 
+            font-size: 2.1rem;
+            margin-bottom: 25px;
+            font-weight: 800;
+        }
+
+        /* CUADRO BONITO: Registro Exitoso (Verde Esmeralda Brillante) */
+        .success-box {
+            background-color: #d1fae5;
+            color: #059669; 
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border: 2px solid #a7f3d0;
+            box-shadow: 0 0 15px rgba(5, 150, 105, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Cuadro de Error (Rojo Neón Brillante) */
+        .error-box {
+            background-color: #fee2e2;
+            color: #ef4444; 
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border: 2px solid #fca5a5;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #6b21a8; 
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        /* Contenedor relativo para posicionar el ojo de la contraseña */
+        .password-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #d8b4fe; 
+            border-radius: 14px;
+            font-size: 1rem;
+            color: #4c1d95;
+            background-color: white;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        /* Foco interactivo que se ilumina al escribir */
+        .form-group input:focus {
+            border-color: #c084fc;
+            box-shadow: 0 0 12px rgba(192, 132, 252, 0.5);
+        }
+
+        /* Estilo para el botón del ojo que muestra la contraseña */
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #a855f7;
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .toggle-password:hover {
+            color: #6b21a8;
+        }
+
+        /* BOTÓN DE INGRESAR AMARILLO/NARANJA ELÉCTRICO BRILLANTE */
+        button[type="submit"] {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #facc15 0%, #f97316 100%);
+            color: #451a03; 
+            border: none;
+            border-radius: 14px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 5px 15px rgba(249, 115, 22, 0.3);
+            text-transform: uppercase;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(249, 115, 22, 0.5),
+                        0 0 15px rgba(250, 204, 21, 0.6);
+        }
+
+        p {
+            margin-top: 25px;
+            font-size: 0.95rem;
+            color: #6b21a8;
+            font-weight: 500;
+        }
+
+        /* Enlace de Registro en Rosa/Rojo Magnético */
+        p a {
+            color: #ef4444; /* Rojo/Rosa brillante */
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            padding: 2px 6px;
+            border-radius: 6px;
+        }
+
+        p a:hover {
+            color: #b91c1c;
+            background-color: #fee2e2;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
+
     <div class="container">
         <h2>Iniciar Sesión</h2>
         
-        <% if (error) { %>
-            <div style="color: red; text-align: center; margin-bottom: 10px;"><%= error %></div>
+        <!-- Bloque de Registro Exitoso (Verde Esmeralda) -->
+        <% if (typeof success !== 'undefined' && success) { %>
+            <div class="success-box">
+                <i class="bi bi-check-circle-fill"></i> <%= success %>
+            </div>
+        <% } %>
+
+        <!-- Bloque de Errores (Rojo Neón) -->
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="error-box">
+                <i class="bi bi-exclamation-triangle-fill"></i> <%= error %>
+            </div>
         <% } %>
 
         <form action="/auth/login" method="POST">
             <div class="form-group">
                 <label>Correo Electrónico</label>
-                <input type="email" name="correo" required>
+                <input type="email" name="correo" placeholder="ejemplo@correo.com" required>
             </div>
+            
             <div class="form-group">
                 <label>Contraseña</label>
-                <input type="password" name="password" required>
+                <div class="password-container">
+                    <input type="password" name="password" id="passwordInput" placeholder="••••••••" required>
+                    <!-- Botón interactivo del ojito -->
+                    <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">
+                        <i class="bi bi-eye-fill" id="eyeIcon"></i>
+                    </button>
+                </div>
             </div>
+            
             <button type="submit">Ingresar</button>
         </form>
+        
         <p>¿No tienes cuenta? <a href="/auth/register">Regístrate aquí</a></p>
     </div>
+
+    <!-- Script interactivo en Javascript puro para alternar ver/ocultar contraseña -->
+    <script>
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('passwordInput');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                // Cambia el ícono al ojo tachado
+                eyeIcon.className = 'bi bi-eye-slash-fill'; 
+            } else {
+                passwordInput.type = 'password';
+                // Regresa al ícono del ojo abierto
+                eyeIcon.className = 'bi bi-eye-fill'; 
+            }
+        }
+    </script>
+
 </body>
 </html>
