@@ -32,3 +32,38 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
+const express = require('express');
+const session = require('express-session');
+const path = require('path');
+const authRoutes = require('./src/routes/authRoutes'); // <-- Nueva línea
+
+const app = express();
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.use(session({
+    secret: 'mediagenda_secret_key_12345',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }
+}));
+
+// Servir archivos estáticos apuntando correctamente a src/public
+app.use(express.static(path.join(__dirname, 'src', 'public')));
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'src', 'views'));
+
+// Enlace de las rutas de Autenticación
+app.use('/auth', authRoutes); // <-- Nueva línea
+
+// Redirección por defecto al login
+app.get('/', (req, res) => {
+    res.redirect('/auth/login');
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});

@@ -1,0 +1,90 @@
+/* Configuración General */
+:root {
+    --bg-pastel: #E8DFF5;
+    --text-dark: #333333;
+    --white: #ffffff;
+    
+    /* Estados llamativos solicitados */
+    --estado-espera: #FFFF00;      /* Amarillo fosforescente */
+    --estado-consulta: #00FFFF;    /* Cian / En consulta */
+    --estado-atendido: #39FF14;    /* Verde neón */
+    --estado-cancelado: #FF3131;   /* Rojo/Naranja vibrante */
+}
+
+body {
+    background-color: var(--bg-pastel);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-dark);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+}
+
+h2 {
+    text-align: center;
+    color: #4A3E56;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #6C5B7B;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #4A3E56;
+}
+
+p {
+    text-align: center;
+    margin-top: 15px;
+}
+
+a {
+    color: #6C5B7B;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Clases de utilidad para los botones de estado del médico */
+.btn-espera { background-color: var(--estado-espera); color: black; }
+.btn-atendido { background-color: var(--estado-atendido); color: black; }
+.btn-cancelar { background-color: var(--estado-cancelado); color: white; }
