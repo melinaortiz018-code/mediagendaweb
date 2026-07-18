@@ -76,7 +76,7 @@
             border: 2px solid transparent; 
         }
 
-        /* Efecto celeste pastel resplandeciente */
+        /* Brillo celeste pastel resplandeciente */
         .role-card:hover {
             transform: translateY(-10px);
             border-color: #38bdf8; 
@@ -85,10 +85,10 @@
                         0 10px 30px rgba(0, 0, 0, 0.08); 
         }
 
-        /* Ajuste de tamaño y degradado para los íconos vectoriales SVG */
+        /* Tamaño óptimo para los vectores */
         .role-card svg {
-            width: 80px;
-            height: 80px;
+            width: 75px;
+            height: 75px;
             margin-bottom: 22px;
             transition: transform 0.3s ease;
         }
@@ -96,10 +96,6 @@
         .role-card:hover svg {
             transform: scale(1.05);
         }
-
-        /* Color degradado aplicado a las figuras internas del SVG */
-        .role-card svg stop.color-top { stop-color: #a78bfa; }
-        .role-card svg stop.color-bottom { stop-color: #7c3aed; }
 
         /* Texto de los roles */
         .role-card span {
@@ -119,35 +115,36 @@
     <main class="main-content">
         <div class="cards-container">
             
-            <!-- Definición compartida del degradado morado para los SVGs -->
-            <svg style="width:0; height:0; position:absolute;" aria-hidden="true" focusable="false">
-                <linearGradient id="purple-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop class="color-top" offset="0%" />
-                    <stop class="color-bottom" offset="100%" />
+            <!-- Definición global del color degradado morado para los 3 íconos -->
+            <svg style="width:0; height:0; position:absolute;">
+                <linearGradient id="purpleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#a78bfa" />
+                    <stop offset="100%" stop-color="#7c3aed" />
                 </linearGradient>
             </svg>
 
-            <!-- Tarjeta Paciente con Dibujo Vectorial Fijo -->
+            <!-- Tarjeta Paciente (Usuario clásico estilizado) -->
             <a href="/auth/login?role=paciente" class="role-card">
-                <svg viewBox="0 0 16 16" fill="url(#purple-gradient)">
-                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                <svg viewBox="0 0 16 16" fill="url(#purpleGradient)">
+                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
                 </svg>
                 <span>Paciente</span>
             </a>
 
-            <!-- Tarjeta Médico con Dibujo Vectorial Fijo -->
+            <!-- Tarjeta Médico (Corazón con línea de pulso real) -->
             <a href="/auth/login?role=medico" class="role-card">
-                <svg viewBox="0 0 16 16" fill="url(#purple-gradient)">
-                    <path d="M8 14.25c.19 0 .366-.07.5-.2l5.133-4.703c1.433-1.314 1.433-3.443 0-4.757a3.56 3.56 0 0 0-4.908 0L8 5.23 7.275 4.59a3.56 3.56 0 0 0-4.908 0c-1.433 1.314-1.433 3.443 0 4.757L7.5 14.05c.134.13.31.2.5.2m0-11.55c.346-.574.962-1 1.75-1 1.38 0 2.5 1.12 2.5 2.5 0 1.206-.734 2.228-1.75 2.75V11h-1V8h-3v3h-1V6.95C4.234 6.428 3.5 5.406 3.5 4.2c0-1.38 1.12-2.5 2.5-2.5.788 0 1.404.426 1.75 1z"/>
+                <svg viewBox="0 0 16 16" fill="url(#purpleGradient)">
+                    <path d="M1.475 9C.348 7.822 0 6.376 0 5.123 0 2.511 2.112.4 4.7 1.4c1.332.516 2.418 1.63 3.3 2.766C8.882 3.03 9.968 1.916 11.3 1.4c2.588-1 4.7 1.11 4.7 3.723 0 1.253-.348 2.699-1.475 3.877L8 15 1.475 9zM11.5 5a.5.5 0 0 0 0-1 .5.5 0 0 0 0 1z"/>
+                    <path d="M2.5 13.5A.5.5 0 0 1 3 13h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
                 </svg>
                 <span>Médico</span>
             </a>
 
-            <!-- Tarjeta Administrador con Dibujo Vectorial Fijo -->
+            <!-- Tarjeta Administrador (Engranaje de configuración perfecto) -->
             <a href="/auth/login?role=admin" class="role-card">
-                <svg viewBox="0 0 16 16" fill="url(#purple-gradient)">
-                    <path d="M9.405 1.02c-.252-.61-1.12c-.61-1.81 0-.252.61-1.12.61-1.81 0zm-1.077.342a.5.5 0 0 1 .416 0l.422.146a.5.5 0 0 1 .316.316l.146.422a.5.5 0 0 1 0 .416l-.146.422a.5.5 0 0 1-.316.316l-.422.146a.5.5 0 0 1-.416 0l-.422-.146a.5.5 0 0 1-.316-.316l-.146-.422a.5.5 0 0 1 0-.416l.146-.422a.5.5 0 0 1 .316-.316zM8 4.75a3.25 3.25 0 1 1 0 6.5 3.25 3.25 0 0 1 0-6.5zM8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-                    <path d="M4.755.123A.5.5 0 0 1 5.16.48l.056.241c.07.301.21.577.408.812l.147.174a.5.5 0 0 1-.067.704l-.213.164a.5.5 0 0 1-.603-.054L4.17 1.95a5.5 5.5 0 0 1-.876-1.531zm3.666 14.542a.5.5 0 0 1-.404-.356l-.056-.241a3.6 3.6 0 0 0-.408-.812l-.147-.174a.5.5 0 0 1 .067-.704l.213-.164a.5.5 0 0 1 .603.054l.719.57a5.5 5.5 0 0 1 .876 1.531zM.123 11.245a.5.5 0 0 1 .357-.405l.241-.056c.301-.07.577-.21.812-.408l.174-.147a.5.5 0 0 1 .704.067l.164.213a.5.5 0 0 1-.054.603l-.57.719a5.5 5.5 0 0 1-1.531.876zM14.542 4.755a.5.5 0 0 1 .405.357l.056.241c.07.301.21.577.408.812l.147.174a.5.5 0 0 1-.067.704l-.213.164a.5.5 0 0 1-.603-.054l-.719-.57a5.5 5.5 0 0 1-.876-1.531z"/>
+                <svg viewBox="0 0 16 16" fill="url(#purpleGradient)">
+                    <path d="M9.405 1.02c-.252-.61-1.12-.61-1.372 0l-.129.31a1.464 1.464 0 0 1-1.62.814l-.329-.062c-.658-.123-1.227.446-1.104 1.104l.062.329c.14.744-.316 1.475-1.012 1.619l-.31.041c-.653.087-.92.833-.48 1.32l.221.246c.501.558.455 1.417-.103 1.916l-.246.22c-.5.447-.417 1.25.185 1.57l.275.147c.66.35.9 1.148.51 1.772l-.173.277c-.378.604.148 1.37.818 1.232l.317-.065c.712-.146 1.417.279 1.599.963l.078.293c.174.654.91.89 1.398.472l.228-.196c.54-.463 1.343-.332 1.713.292l.163.275c.34.57 1.146.61 1.54.08l.183-.245c.44-.588 1.277-.736 1.89-.32l.26.177c.563.38 1.3-.12 1.206-.79l-.04-.287c-.092-.663.352-1.29 1.008-1.414l.288-.054c.663-.124.96-.86.516-1.366l-.197-.225c-.463-.53-.41-1.385.12-1.847l.235-.205c.52-.456.417-1.3-.21-1.58l-.272-.12a1.464 1.464 0 0 1-.814-1.62l.062-.329c.123-.658-.446-1.227-1.104-1.104l-.329.062a1.464 1.464 0 0 1-1.62-.814l-.129-.31zm-1.405 4.73a3.25 3.25 0 1 1 0 6.5 3.25 3.25 0 0 1 0-6.5z"/>
                 </svg>
                 <span>Administrador</span>
             </a>
