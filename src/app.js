@@ -31,7 +31,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Configuración de archivos estáticos (Ruta absoluta ultra segura)
 app.use(express.static(path.join(__dirname, 'src', 'public')));
-
+app.use('/icons', express.static(path.join(__dirname, 'node_modules', 'bootstrap-icons', 'font')));
 
 // 6. Inyección de URLs con prefijos individuales
 app.use('/auth', authRoutes);
