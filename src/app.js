@@ -76,3 +76,15 @@ app.use('/auth', authRoutes);
 app.use('/dashboard', pacienteRoutes); // <-- Agregar línea
 
 // ... (El resto del código de app.listen sin cambios)
+// ... (Tus importaciones anteriores)
+const pacienteRoutes = require('./src/routes/pacienteRoutes');
+const medicoRoutes = require('./src/routes/medicoRoutes'); // <-- Agregar línea
+
+const app = express();
+// ... (Tus configuraciones de middlewares)
+
+app.use('/auth', authRoutes);
+app.use('/dashboard', pacienteRoutes);
+app.use('/dashboard', medicoRoutes); // <-- Agregar línea
+
+// ... (Resto del código de app.listen)

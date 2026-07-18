@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediAgenda - Panel del Médico</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body { display: block; padding: 20px; min-height: auto; }
+        .dashboard-container { max-width: 1100px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #E8DFF5; padding-bottom: 15px; margin-bottom: 20px; }
+        .filtros-agenda { margin-bottom: 20px; display: flex; gap: 10px; }
+        .btn-filtro { padding: 8px 16px; background-color: #6C5B7B; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; width: auto; }
+        .btn-filtro.activo { background-color: #4A3E56; border: 2px solid black; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #6C5B7B; color: white; }
+        .acciones-form { display: inline-flex; gap: 5px; margin: 0; }
+        .btn-accion { padding: 6px 12px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; width: auto; display: inline-block; }
+        .alerta { padding: 12px; margin-bottom: 15px; border-radius: 6px; text-align: center; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <div class="header">
+            <h2>Panel de Control Médico: Dr(a). <%= usuario.nombre %></h2>
+            <a href="/auth/logout" style="color: red; font-weight: bold;">Cerrar Sesión</a>
+        </div>
+
+        <% if (success) { %>
+            <div class="alerta" style="background-color: var(--estado-atendido); color: black;"><%= success %></div>
+        <% } %>
+
+        <h3>Control de Agenda Médica</h3>
+        
+        <!-- Filtros para cambiar entre ver citas Diarias o Semanales -->
+        <div class="filtros-agenda">
+            <button class="btn-filtro activo" id="btnTodos" onclick="filtrarAgenda('todos')">Todas las Citas</button>
+            <button class="btn-filtro" id="btnHoy" onclick="filtrarAgenda('hoy')">Vista Diaria (Hoy)</button>
+            <button class="btn-filtro" id="btnSemana" onclick="filtrarAgenda('semana')">Vista Semanal</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Paciente</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Estado Actual</th>
+                    <th>Acciones en Tiempo Real</th>
+                </tr>
+            </thead>
+            <tbody id="tablaCitas">
+                <% citas.forEach(cita => { %>
+                    <tr class="fila-cita" data-fecha="<%= cita.fecha.toISOString().split('T')[0] %>">
+                        <td><%= cita.paciente_nombre %></td>
+                        <td><%= cita.fecha.toLocaleDateString() %></td>
+                        <td><%= cita.hora %></td>
+                        <td>
+                            <strong><%= cita.estado %></strong>
+                        </td>
+                        <td>
+                            <!-- Botones de Estados Llamativos e Instantáneos -->
+                            <form action="/dashboard/medico/cambiar-estado" method="POST" class="acciones-form">
+                                <input type="hidden" name="cita_id" value="<%= cita.id %>">
+                                
+                                <button type="submit" name="nuevo_estado" value="En espera" class="btn-accion" style="background-color: var(--estado-espera); color: black;">En Espera</button>
+                                <button type="submit" name="nuevo_estado" value="En consulta" class="btn-accion" style="background-color: var(--estado-consulta); color: black;">En Consulta</button>
+                                <button type="submit" name="nuevo_estado" value="Atendido" class="btn-accion" style="background-color: var(--estado-atendido); color: black;">Atendido</button>
+                                <button type="submit" name="nuevo_estado" value="No asistió" class="btn-accion" style="background-color: var(--estado-cancelado); color: white;">No Asistió</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function filtrarAgenda(tipo) {
+            // Manejo estético de los botones de filtro
+            document.querySelectorAll('.btn-filtro').forEach(btn => btn.classList.remove('activo'));
+            if(tipo === 'todos') document.getElementById('btnTodos').classList.add('activo');
+            if(tipo === 'hoy') document.getElementById('btnHoy').classList.add('activo');
+            if(tipo === 'semana') document.getElementById('btnSemana').classList.add('activo');
+
+            const filas = document.querySelectorAll('.fila-cita');
+            const hoy = new Date();
+            
+            // Obtener fechas límites limpias
+            const hoyStr = hoy.toISOString().split('T')[0];
+            
+            const inicioSemana = new Date(hoy);
+            inicioSemana.setDate(hoy.getDate() - hoy.getDay() + 1); // Lunes
+            const finSemana = new Date(inicioSemana);
+            finSemana.setDate(inicioSemana.getDate() + 6); // Domingo
+
+            filas.forEach(fila => {
+                const fechaCitaStr = fila.getAttribute('data-fecha');
+                const fechaCita = new Date(fechaCitaStr + 'T00:00:00');
+
+                if (tipo === 'todos') {
+                    fila.style.display = '';
+                } else if (tipo === 'hoy') {
+                    fila.style.display = (fechaCitaStr === hoyStr) ? '' : 'none';
+                } else if (tipo === 'semana') {
+                    fila.style.display = (fechaCita >= inicioSemana && fechaCita <= finSemana) ? '' : 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
