@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediAgenda - Panel del Paciente</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body { display: block; padding: 20px; min-height: auto; }
+        .dashboard-container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #E8DFF5; padding-bottom: 15px; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { border: 1px solid #ccc; padding: 15px; border-radius: 8px; background: #fafafa; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #6C5B7B; color: white; }
+        .badge { padding: 5px 10px; border-radius: 4px; font-weight: bold; font-size: 12px; }
+        .alerta-flotante { padding: 15px; margin-bottom: 15px; border-radius: 6px; font-weight: bold; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <div class="header">
+            <h2>Bienvenido, Paciente: <%= usuario.nombre %></h2>
+            <a href="/auth/logout" style="color: red;">Cerrar Sesión</a>
+        </div>
+
+        <!-- Sistema de Alertas Emergentes en Pantalla -->
+        <% if (error) { %>
+            <div class="alerta-flotante" style="background-color: var(--estado-cancelado); color: white;"><%= error %></div>
+        <% } %>
+        <% if (success) { %>
+            <div class="alerta-flotante" style="background-color: var(--estado-atendido); color: black;"><%= success %></div>
+        <% } %>
+
+        <div class="grid">
+            <!-- Formulario de Agendamiento con Filtro -->
+            <div class="card">
+                <h3>Agendar Nueva Cita</h3>
+                <form action="/dashboard/paciente/agendar" method="POST">
+                    <div class="form-group">
+                        <label>1. Filtrar por Especialidad</label>
+                        <select id="filtroEspecialidad" onchange="filtrarMedicos()">
+                            <option value="todos">Todas las especialidades</option>
+                            <% especialidades.forEach(esp => { %>
+                                <option value="<%= esp.nombre %>"><%= esp.nombre %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>2. Seleccionar Médico</label>
+                        <select name="medico_id" id="selectMedico" required>
+                            <option value="">-- Seleccione un profesional --</option>
+                            <% medicos.forEach(med => { %>
+                                <option value="<%= med.id %>" data-especialidad="<%= med.especialidad %>">
+                                    <%= med.nombre %> (<%= med.especialidad %>)
+                                </option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" name="fecha" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Hora</label>
+                        <input type="time" name="hora" required>
+                    </div>
+
+                    <button type="submit">Confirmar Cita Médica</button>
+                </form>
+            </div>
+
+            <!-- Listado de Citas del Paciente -->
+            <div class="card">
+                <h3>Mis Citas</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Médico</th>
+                            <th>Fecha/Hora</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% citas.forEach(cita => { %>
+                            <tr>
+                                <td><%= cita.medico_nombre %></td>
+                                <td><%= cita.fecha.toLocaleDateString() %> - <%= cita.hora %></td>
+                                <td>
+                                    <% if(cita.estado === 'En espera') { %>
+                                        <span class="badge" style="background: var(--estado-espera); color: black;"><%= cita.estado %></span>
+                                    <% } else if(cita.estado === 'Atendido') { %>
+                                        <span class="badge" style="background: var(--estado-atendido); color: black;"><%= cita.estado %></span>
+                                    <% } else if(cita.estado === 'Cancelado' || cita.estado === 'No asistió') { %>
+                                        <span class="badge" style="background: var(--estado-cancelado); color: white;"><%= cita.estado %></span>
+                                    <% } else { %>
+                                        <span class="badge" style="background: var(--estado-consulta); color: black;"><%= cita.estado %></span>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Historial Clínico Básico -->
+        <div class="card" style="margin-top: 20px;">
+            <h3>Mi Historial Clínico Básico</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Médico</th>
+                        <th>Diagnóstico</th>
+                        <th>Tratamiento Atendido</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% historial.forEach(h => { %>
+                        <tr>
+                            <td><%= h.fecha.toLocaleDateString() %></td>
+                            <td><%= h.medico_nombre %></td>
+                            <td><strong><%= h.diagnostico %></strong></td>
+                            <td><%= h.tratamiento %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function filtrarMedicos() {
+            const espSeleccionada = document.getElementById('filtroEspecialidad').value;
+            const selectMedico = document.getElementById('selectMedico');
+            const opciones = selectMedico.options;
+
+            for (let i = 1; i < opciones.length; i++) {
+                const espMedico = opciones[i].getAttribute('data-especialidad');
+                if (espSeleccionada === 'todos' || espMedico === espSeleccionada) {
+                    opciones[i].style.display = 'block';
+                } else {
+                    opciones[i].style.display = 'none';
+                }
+            }
+            selectMedico.value = ""; 
+        }
+    </script>
+</body>
+</html>

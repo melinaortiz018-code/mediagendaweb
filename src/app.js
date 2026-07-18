@@ -67,3 +67,12 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
+// ... (Tus imports anteriores en app.js)
+const authRoutes = require('./src/routes/authRoutes');
+const pacienteRoutes = require('./src/routes/pacienteRoutes'); // <-- Agregar línea
+
+// ... (Tus configuraciones de app.use)
+app.use('/auth', authRoutes);
+app.use('/dashboard', pacienteRoutes); // <-- Agregar línea
+
+// ... (El resto del código de app.listen sin cambios)
