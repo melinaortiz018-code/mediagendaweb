@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenido a MediAgenda</title>
-    <!-- FontAwesome para los íconos de Paciente, Médico y Administrador -->
-    <link rel="stylesheet" href="https://cloudflare.com">
+    <!-- Enlace alternativo y robusto para los íconos de FontAwesome -->
+    <link rel="stylesheet" href="https://cloudflare.com" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <style>
         * {
@@ -16,84 +16,86 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f7fc;
+            /* Fondo cambiado a un tono celeste pastel muy suave y limpio */
+            background-color: #e0f2fe; 
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        /* Cabecera con degradado morado idéntico al de tu imagen */
+        /* Cabecera morada con degradado */
         .header {
             background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
             color: white;
             text-align: center;
-            padding: 40px 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            padding: 50px 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         }
 
         .header h1 {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .header p {
-            font-size: 1rem;
+            font-size: 1.1rem;
             opacity: 0.9;
         }
 
-        /* Contenedor de las tarjetas de selección */
+        /* Contenedor principal */
         .main-content {
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 40px 20px;
+            padding: 50px 20px;
         }
 
         .cards-container {
             display: flex;
-            gap: 25px;
-            max-width: 1000px;
+            gap: 40px; /* Más espacio de separación entre cuadros */
+            max-width: 1100px;
             width: 100%;
             justify-content: center;
             flex-wrap: wrap;
         }
 
-        /* Estilo de los botones/tarjetas */
+        /* Cuadros significativamente más grandes */
         .role-card {
             background: white;
-            border-radius: 12px;
-            width: 240px;
-            padding: 35px 20px;
+            border-radius: 16px;
+            width: 280px; /* Aumentado de 240px a 280px */
+            height: 240px; /* Añadida altura fija para que se vean imponentes */
+            padding: 20px;
             text-align: center;
             text-decoration: none;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            border: 1px solid rgba(0,0,0,0.02);
+            border: 2px solid transparent; /* Preparado para el borde dinámico */
         }
 
-        /* Efecto sutil al pasar el mouse por encima */
+        /* Efecto al pasar el mouse: se eleva y cambia a bordes/sombras celestes pastel */
         .role-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(124, 58, 237, 0.1);
+            transform: translateY(-8px);
+            border-color: #7dd3fc; /* Borde celeste pastel al pasar el cursor */
+            box-shadow: 0 20px 35px rgba(125, 211, 252, 0.3); /* Sombra difuminada celeste */
         }
 
-        /* Estilos para los íconos de FontAwesome con color morado */
+        /* Tamaño de los íconos aumentado */
         .role-card i {
-            font-size: 3.5rem;
-            color: #7c3aed;
-            margin-bottom: 20px;
+            font-size: 4.5rem; /* Aumentado para rellenar el espacio */
+            color: #7c3aed; /* Color morado para que resalte con el fondo celeste */
+            margin-bottom: 22px;
         }
 
-        /* Texto debajo de los íconos */
+        /* Texto de los roles más grande y legible */
         .role-card span {
-            font-size: 1.2rem;
+            font-size: 1.4rem; 
             font-weight: 600;
             color: #4c1d95;
         }
@@ -101,31 +103,29 @@
 </head>
 <body>
 
-    <!-- Sección de la Cabecera -->
     <header class="header">
         <h1>Bienvenido a MediAgenda</h1>
         <p>Selecciona tu rol para ingresar al sistema de gestión de citas</p>
     </header>
 
-    <!-- Sección de Roles (Modifica los 'href' con tus rutas reales de Express) -->
     <main class="main-content">
         <div class="cards-container">
             
             <!-- Tarjeta Paciente -->
             <a href="/auth/login?role=paciente" class="role-card">
-                <i class="fa-solid fa-user"></i>
+                <i class="fa-solid fa-user-injured"></i>
                 <span>Paciente</span>
             </a>
 
             <!-- Tarjeta Médico -->
             <a href="/auth/login?role=medico" class="role-card">
-                <i class="fa-solid fa-stethoscope"></i>
+                <i class="fa-solid fa-user-md"></i>
                 <span>Médico</span>
             </a>
 
             <!-- Tarjeta Administrador -->
             <a href="/auth/login?role=admin" class="role-card">
-                <i class="fa-solid fa-gear"></i>
+                <i class="fa-solid fa-user-shield"></i>
                 <span>Administrador</span>
             </a>
 
