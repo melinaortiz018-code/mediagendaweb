@@ -34,11 +34,9 @@
 - **Google Fonts:** Tipografía optimizada para una excelente legibilidad.
 
 ---
+## 👩‍💻 Autoras
 
-## 🚀 Instalación y Uso Local
+Este proyecto fue desarrollado por:
 
-Para ejecutar este proyecto de manera local en tu máquina:
-
-1. **Clona el repositorio:**
-   ```bash
-   git clone [https://github.com/melinaortiz018-code/mediagendaweb.git](https://github.com/melinaortiz018-code/mediagendaweb.git)
+* **Melina Ortiz** — [GitHub](https://github.com/melinaortiz018-code)
+* **Stephani Mosquera** — [GitHub](https://github.com/Juleixi7) 
